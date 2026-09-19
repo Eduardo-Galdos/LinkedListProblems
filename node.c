@@ -1,5 +1,6 @@
 #include "node.h"
 #include <stdlib.h>
+#include <assert.h>
 
 int Length(struct Node* head){
   struct Node* current;
@@ -35,5 +36,209 @@ void Push(struct Node** headref, int data){
   *headref = NewNode;
 }
 
+int Count(struct node* head, int searchFor){
+
+  struct Node* current  = head;
+  int count = 0;
+
+  while(current != NULL){
+    if(current->data == searchFor)
+        count++;
+    current = current->next;
+  }
+
+  return count;
+}
+
+int GetNth(struct node* head, int index){
+  
+  struct Node* current = head;
+
+  while(current != NULL){
+    if(!index)
+        return current->data;
+        
+    current = current->next;
+    index--;
+  }
+  
+  assert(0);
+}
+
+void DeleteList(struct node** headRef){
+
+  struct Node* current = *headRef;
+  *headRef = NULL;
+  headRef = &current;
+
+  while(current != NULL){
+    headref = &(current->next);
+    free(current);
+    current = *headref;
+  }
+
+}
+
+int Pop(struct node** headRef){
+
+  assert(*headRef != NULL);
+  struct Node* current = *headRef;
+  *headRef = current->next;
+
+  free(current);
+}
+
+void InsertNth(struct node** headRef, int index, int data){
+
+  struct Node** current = headRef;
+  
+  while(*current != NULL && index){
+    index--;
+    current = &((*current)->next);
+  }
+
+  assert(*current != NULL);
+  Push(current, data);
+}
+
+void SortedInsert(struct node** headRef, struct node* newNode){
+  struct Node** current = headRef;
+
+  while(*current != NULL){
+    if((*current)->data >= newNode->data)
+        break;
+    current = &((*current)->next);
+  }
+
+  struct Node** currentTemp = current;
+  *current = newNode;
+  newNode->next = *currentTemp;
+}
+
+void InsertSort(struct node** headRef){
+  struct Node* current = *headRef;
+  struct Node* new = NULL;
+  struct Node* next;
+
+  while(current != NULL){
+    next = current->next;    
+    SortedInsert(&new, current);
+    current = next;
+  }
+
+  *headRef = new;
+
+  return;
+}
+
+void Append(struct node** aRef, struct node** bRef){
+  struct Node** current = aRef;
+  while(*current != NULL)
+      current = &((*current)->next);
+
+  *current = *bRef;
+  *bRef = NULL;
+}
+
+
+void FrontBackSplit(struct node* source, struct node** frontRef, struct node** backRef){
+
+  int len = Length(source);
+
+  assert(len > 0);
+
+  int frontLen = (len - 1) / 2;
+
+  struct Node* current = source;
+
+  while(frontLen--)
+    current = current->next;
+  
+  *backRef = current->next;
+  current->next = NULL;
+  *frontRef = source;
+}
+
+//el nick decia asumir q esta ordenada
+
+void RemoveDuplicates(struct node* head){
+
+  struct Node* current = head;
+  struct Node* next = head;
+  struct Node* victim = head;
+
+  while(current != NULL){
+    next = current->next;  
+    while(next != NULL && next->data == current->data){
+      victim = next;
+      next = next->next;
+      free(victim);  
+    }
+
+    current->next = next;
+    current = next;
+  }
+
+  return;
+}
+
+void MoveNode(struct node** destRef, struct node** sourceRef){
+
+  struct Node* current = *destRef;
+  struct Node* oldSource = *sourceRef;
+
+  *sourceRef = (*sourceRef)->next;
+  *destRef = oldSource;
+  (*destRef)->next = current;
+
+  return;
+}
+
+
+void AlternatingSplit(struct node* source, struct node** aRef, struct node** bRef){
+
+  int len = Length(source);
+  
+  assert(len > 0);
+
+  struct Node dummyA = {0,NULL};
+  struct Node dummyB = {0,NULL};
+  struct Node* current = source;
+
+  *aRef = &dummyA;
+  *bRef = &dummyB;
+
+  int index = 0;
+
+  while(current != NULL){
+    if(index % 2 == 0){
+      (*aRef)->next = current;
+      *aRef = current;
+    }
+
+    else{
+      (*bRef)->next = current;
+      *bRef = current;
+    }
+
+    current = current->next;
+    index++;
+  }
+
+  (*bRef)->next = NULL;
+  (*aRef)->next = NULL;
+
+  *aRef = dummyA.next;
+  *bRef = dummyB.next;
+
+  return;
+}
+
+struct node* ShuffleMerge(struct node* a, struct node* b){}
+struct node* SortedMerge(struct node* a, struct node* b){}
+void MergeSort(struct node** headRef){}
+struct node* SortedIntersect(struct node* a, struct node* b){}
+void Reverse(struct node** headRef){}
+void RecursiveReverse(struct node** headRef){}
 
 int main(){}
