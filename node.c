@@ -145,7 +145,11 @@ void FrontBackSplit(struct Node* source, struct Node** frontRef, struct Node** b
 
   int len = Length(source);
 
-  assert(len > 0);
+  if(len <= 0){
+    *frontRef = NULL;
+    *backRef = NULL;
+    return;
+  }
 
   int frontLen = (len - 1) / 2;
 
@@ -243,9 +247,13 @@ struct Node* ShuffleMerge(struct Node* a, struct Node* b){
 
   while(currentA && currentB){
     s->next = currentA;
-    s->next->next = currentB;
+    s = s->next;
 
-    s = s->next->next;
+    s->next = currentB;
+    s = s->next;
+
+    currentA = currentA->next;
+    currentB = currentB->next;
   }
 
   if(currentA)
@@ -287,7 +295,20 @@ struct Node* SortedMerge(struct Node* a, struct Node* b){
 
   return dummy.next;
 }
-void MergeSort(struct Node** headRef){}
+
+void MergeSort(struct Node** headRef){
+
+  if(*headRef == NULL)
+      return;
+
+  struct Node* left,right;
+  FrontBackSplit(*headref, &left, &right);
+
+  MergeSort(&left);
+  MergeSort(&right);
+
+  *headRef = SortedMerge(left, right);  
+}
 struct Node* SortedIntersect(struct Node* a, struct Node* b){}
 void Reverse(struct Node** headRef){}
 void RecursiveReverse(struct Node** headRef){}
