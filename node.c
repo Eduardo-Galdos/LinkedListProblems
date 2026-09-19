@@ -297,12 +297,10 @@ struct Node* SortedMerge(struct Node* a, struct Node* b){
 }
 
 void MergeSort(struct Node** headRef){
-
-  int len = Length(*headRef);
   
-  // nada q ordenar si esta vacio o si tiene solo un elemento
+  // nada q ordenar si esta vacio o si tiene solo un elemento, abusando de como evalua c las condiciones(nivel hacker)
 
-  if(len == 1 || len == 0)
+  if(*headRef == NULL || (*headRef)->next == NULL)
       return;
 
   struct Node* left,right;
