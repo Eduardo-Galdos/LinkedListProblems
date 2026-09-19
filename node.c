@@ -235,6 +235,29 @@ void AlternatingSplit(struct Node* source, struct Node** aRef, struct Node** bRe
 }
 
 struct Node* ShuffleMerge(struct Node* a, struct Node* b){
+  struct Node dummy = {0, NULL};
+  struct Node* s = &dummy;
+  
+  struct Node* currentA = a;
+  struct Node* currentB = b;
+
+  while(currentA && currentB){
+    s->next = currentA;
+    s->next->next = currentB;
+
+    s = s->next->next;
+  }
+
+  if(currentA)
+    s->next = currentA;
+  if(currentB)
+    s->next = currentB;
+
+  return dummy.next;
+
+  //dummy esta rotisimo para estas cosas, saalio la idea bastante rapido a comparacion de hacer malabares para no salirse del rango
+}
+struct Node* SortedMerge(struct Node* a, struct Node* b){
 
   struct Node dummy = {0, NULL};
   struct Node* s = &dummy;
@@ -254,24 +277,16 @@ struct Node* ShuffleMerge(struct Node* a, struct Node* b){
       currentB = currentB->next;
     }
   }
-
-  while(currentA && !currentB){
+// no hace falta el !current del otro porq si o si solo queda uno q no sea null
+  if(currentA)
     s->next = currentA;
-    s = s->next;
-    currentA = currentA->next;
-  }
 
-  while(currentB && !currentA){
+  if(currentB)
     s->next = currentB;
-    s = s->next;
-    currentB = currentB->next;
-  }
   
-  s->next = NULL;
 
   return dummy.next;
 }
-struct Node* SortedMerge(struct Node* a, struct Node* b){}
 void MergeSort(struct Node** headRef){}
 struct Node* SortedIntersect(struct Node* a, struct Node* b){}
 void Reverse(struct Node** headRef){}
