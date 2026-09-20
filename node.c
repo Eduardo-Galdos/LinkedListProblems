@@ -320,14 +320,16 @@ struct Node* SortedIntersect(struct Node* a, struct Node* b){
   struct Node* currentB = b;
 
   while(currentA && currentB){
-    if(currentA->data = currentB->data){
-      Push(&Inter, currentA->data);
+    if(currentA->data == currentB->data){
+      Push(&(Inter->next), currentA->data);
       
-      while(currentA->next && (currentA->next->data == Inter->data))
+      while(currentA && (currentA->data == Inter->data))
           currentA = currentA->next;
-      while(currentB->next && (currentB->next->data == Inter->data))
+      while(currentB && (currentB->data == Inter->data))
           currentB = currentB->next;
-
+      
+      if(!currentA || !currentB) break;
+      
       Inter = Inter->next;
     }
 
