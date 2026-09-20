@@ -323,17 +323,17 @@ struct Node* SortedIntersect(struct Node* a, struct Node* b){
     if(currentA->data == currentB->data){
       Push(&(Inter->next), currentA->data);
       
-      while(currentA && (currentA->data == Inter->data))
+      while(currentA && (currentA->data == Inter->next->data))
           currentA = currentA->next;
-      while(currentB && (currentB->data == Inter->data))
+      while(currentB && (currentB->data == Inter->next->data))
           currentB = currentB->next;
       
-      if(!currentA || !currentB) break;
-      
       Inter = Inter->next;
+
+      if(!currentA || !currentB) break;
     }
 
-    if(currentA->data > currentB->data)
+    else if(currentA->data > currentB->data)
       currentB = currentB->next;
     else
       currentA = currentA->next;
