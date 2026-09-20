@@ -311,8 +311,52 @@ void MergeSort(struct Node** headRef){
 
   *headRef = SortedMerge(left, right);  
 }
-struct Node* SortedIntersect(struct Node* a, struct Node* b){}
-void Reverse(struct Node** headRef){}
+struct Node* SortedIntersect(struct Node* a, struct Node* b){
+
+  struct Node dummy = {0,NULL};
+  struct Node* Inter = &dummy;
+
+  struct Node* currentA = a;
+  struct Node* currentB = b;
+
+  while(currentA && currentB){
+    if(currentA->data = currentB->data){
+      Push(&Inter, currentA->data);
+      
+      while(currentA->next && (currentA->next->data == Inter->data))
+          currentA = currentA->next;
+      while(currentB->next && (currentB->next->data == Inter->data))
+          currentB = currentB->next;
+
+      Inter = Inter->next;
+    }
+
+    if(currentA->data > currentB->data)
+      currentB = currentB->next;
+    else
+      currentA = currentA->next;
+  }
+
+  return dummy.next;
+}
+void Reverse(struct Node** headRef){
+  
+  if(*headRef == NULL) return;
+
+  struct Node* current = *headRef;
+  struct Node* newnext = NULL;
+  struct Node* next = NULL;
+
+  while(current){
+    next = current->next;
+    current->next = newnext;
+    newnext = current;
+
+    current = next;
+  }
+
+  *headRef = newnext;
+}
 void RecursiveReverse(struct Node** headRef){}
 
 int main(){}
